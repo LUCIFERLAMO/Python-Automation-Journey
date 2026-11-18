@@ -19,10 +19,9 @@ def scan_directory(path):
     count = 0 
     for item in path.iterdir():
         if item.is_file():
-            print(item.name)
             count += 1
 
-    print(f"Total Files: {count}")
+    return count
 
 def identify_extension(path):
     print("Filename\tExtension\tCategory")
@@ -35,6 +34,9 @@ def identify_extension(path):
            print(f"{name}\t\t{extension}\t\t{category}")
         else:
            print(f"{item.name}\t\tunknown\t\tunknown")
+
+    c = scan_directory(path)
+    print(f"Total Files: {c}")
 
 def categorize_file():
     categorize = {
@@ -53,7 +55,6 @@ def categorize_file():
 def main():
   name = get_directory()
   validate_directory(name)
-  scan_directory(name)
   identify_extension(name)
   
 if __name__ == "__main__":
