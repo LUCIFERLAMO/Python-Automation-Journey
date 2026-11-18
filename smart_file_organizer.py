@@ -23,12 +23,22 @@ def scan_directory(path):
             count += 1
 
     print(f"Total Files: {count}")
-    
+
+def identify_extention(path):
+    for item in path.iterdir():
+        if item.suffix:
+           print(item.suffix.lower())
+        else: 
+            print(f"No Extention for: {item.name}")
+
+
+
  
 def main():
   name = get_directory()
   validate_directory(name)
   scan_directory(name)
+  identify_extention(name)
   
 if __name__ == "__main__":
     main()
