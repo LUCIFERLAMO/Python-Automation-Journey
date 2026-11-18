@@ -9,12 +9,16 @@ def get_directory():
 def validate_directory(name): # dealing with the path object
     if not name.exists():
         print("Directory doesn't exist")
+        return False 
     elif name.is_file():
         print("File not accepted. Only directory")
+        return False 
     elif not name.is_dir():
         print("Not a directory")
+        return False 
     else:
         print("Directory accepted")
+        return True
 
 def scan_directory(path):
     count = 0 
@@ -22,7 +26,7 @@ def scan_directory(path):
         if item.is_file():
             count += 1
 
-    return count
+    print(f"total files: {count}")
 
 def categorize_file():
     categorize = {
@@ -51,9 +55,9 @@ def identify_extension(path):
            print(f"{name}\t\t{extension}\t\t{category}")
         elif not item.is_dir():
            print(f"{item.name}\t\tunknown\t\tunknown")
-
-    c = scan_directory(path)
-    print(f"Total Files: {c}")
+           create_category_folder(path,"unknown")
+           f = path / "unknown"
+           move_file(item,f)
 
 
 def create_category_folder(path, category):
@@ -69,12 +73,14 @@ def move_file(source_file_path, destination_folder_path):
     if not final.exists():
         shutil.move(source_file_path,destination_folder_path)
         
-
-
 def main():
   name = get_directory()
-  validate_directory(name)
-  identify_extension(name)
+  result = validate_directory(name)
+  if result: 
+    scan_directory(name)
+    identify_extension(name)
+  else: 
+      print("Not accepted")
   
   
 if __name__ == "__main__":
