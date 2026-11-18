@@ -3,7 +3,7 @@ from pathlib import Path
 def get_directory():
     
     directory = Path(input("Enter the directory name: "))
-    return directory #.name = gives me the directiry name, returning the "Path" object
+    return directory #.name = gives me the directory name, returning the "Path" object
 
 def validate_directory(name): # dealing with the path object
     if not name.exists():
