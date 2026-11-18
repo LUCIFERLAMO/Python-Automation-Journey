@@ -1,87 +1,125 @@
+
 from pathlib import Path
 import shutil
 
-def get_directory():
-    
-    directory = Path(input("Enter the directory name: "))
-    return directory #.name = gives me the directory name, returning the "Path" object
 
-def validate_directory(name): # dealing with the path object
+def get_directory():
+    """Prompt for and return the directory to organize."""
+    directory = Path(input("\nEnter the directory path: "))
+    return directory
+
+
+def validate_directory(name):
+    """Check whether the supplied path is an existing directory."""
     if not name.exists():
-        print("Directory doesn't exist")
-        return False 
+        print("[!] Directory doesn't exist")
+        return False
     elif name.is_file():
-        print("File not accepted. Only directory")
-        return False 
+        print("[!] File not accepted. Only directories allowed")
+        return False
     elif not name.is_dir():
-        print("Not a directory")
-        return False 
+        print("[!] Invalid directory")
+        return False
     else:
-        print("Directory accepted")
+        print("[+] Directory accepted")
         return True
 
+
 def scan_directory(path):
-    count = 0 
+    """Count and display files directly inside the directory."""
+    count = 0
+
     for item in path.iterdir():
         if item.is_file():
             count += 1
+    print(f"[+] Total files found: {count}")
 
-    print(f"total files: {count}")
 
 def categorize_file():
-    categorize = {
-        ".jpg":"Image",
-        ".pdf":"Document",
-        ".mp4":"Video",
-        ".mp3":"Audio",
-        ".txt":"Text",
-        ".zip":"Archive",
-        "":"unknown"
+    """Return the file-extension to category mapping."""
+    categories = {
+        ".jpg": "Image",
+        ".pdf": "Document",
+        ".mp4": "Video",
+        ".mp3": "Audio",
+        ".txt": "Text",
+        ".zip": "Archive",
+        "": "unknown"
     }
-
-    return categorize
-
-def identify_extension(path):
-    print("Filename\tExtension\tCategory")
-    for item in path.iterdir():
-        if item.suffix and item.is_file():
-           name = item.name
-           extension = item.suffix.lower().strip()
-           data = categorize_file()
-           category = data.get(extension,"no")
-           create_category_folder(path,category)
-           full_path = path / category
-           move_file(item,full_path)
-           print(f"{name}\t\t{extension}\t\t{category}")
-        elif not item.is_dir():
-           print(f"{item.name}\t\tunknown\t\tunknown")
-           create_category_folder(path,"unknown")
-           f = path / "unknown"
-           move_file(item,f)
+    return categories
 
 
 def create_category_folder(path, category):
+    """Create a category folder when it does not already exist."""
     full_path = path / category
+
     if not full_path.exists():
         full_path.mkdir(exist_ok=True)
 
-  
 
 def move_file(source_file_path, destination_folder_path):
+    """Move a file unless a file with the same name already exists."""
     source_file_name = source_file_path.name
     final = destination_folder_path / source_file_name
+
     if not final.exists():
-        shutil.move(source_file_path,destination_folder_path)
-        
+        shutil.move(source_file_path, destination_folder_path)
+
+
+def identify_extension(path):
+    """Display file details and move each file into its category folder."""
+    print("\n" + "=" * 60)
+    print(f"{'FILENAME':<25}{'EXTENSION':<15}{'CATEGORY':<15}")
+    print("=" * 60)
+
+    for item in path.iterdir():
+        if item.suffix and item.is_file():
+            name = item.name
+            extension = item.suffix.lower().strip()
+
+            data = categorize_file()
+            category = data.get(extension, "no")
+
+            create_category_folder(path, category)
+
+            full_path = path / category
+            move_file(item, full_path)
+
+            print(f"{name:<25}{extension:<15}{category:<15}")
+
+        elif not item.is_dir():
+            print(f"{item.name:<25}{'unknown':<15}{'unknown':<15}")
+
+            create_category_folder(path, "unknown")
+
+            f = path / "unknown"
+            move_file(item, f)
+
+    print("=" * 60)
+
+
 def main():
-  name = get_directory()
-  result = validate_directory(name)
-  if result: 
-    scan_directory(name)
-    identify_extension(name)
-  else: 
-      print("Not accepted")
-  
-  
+    print("\n" + "=" * 60)
+    print("                 SMART FILE ORGANIZER")
+    print("=" * 60)
+
+    name = get_directory()
+    result = validate_directory(name)
+
+    if result:
+        print("\n[+] Scanning directory...")
+        scan_directory(name)
+
+        print("\n[+] Organizing files...")
+        identify_extension(name)
+
+        print("\n[+] File organization process completed!")
+
+    else:
+        print("\n[-] Directory not accepted. Exiting program.")
+
+    print("=" * 60)
+
+
 if __name__ == "__main__":
     main()
