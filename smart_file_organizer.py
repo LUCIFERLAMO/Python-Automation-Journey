@@ -7,7 +7,7 @@ def get_directory():
 
 def validate_directory(name): # dealing with the path object
     if not name.exists():
-        print("Directory dosent exist")
+        print("Directory doesn't exist")
     elif name.is_file():
         print("File not accepted. Only directory")
     elif not name.is_dir():
@@ -24,21 +24,37 @@ def scan_directory(path):
 
     print(f"Total Files: {count}")
 
-def identify_extention(path):
+def identify_extension(path):
+    print("Filename\tExtension\tCategory")
     for item in path.iterdir():
         if item.suffix:
-           print(item.suffix.lower())
-        else: 
-            print(f"No Extention for: {item.name}")
+           name = item.name
+           extension = item.suffix.lower().strip()
+           data = categorize_file()
+           category = data.get(extension,"no")
+           print(f"{name}\t\t{extension}\t\t{category}")
+        else:
+           print(f"{item.name}\t\tunknown\t\tunknown")
 
+def categorize_file():
+    categorize = {
+        ".jpg":"Image",
+        ".pdf":"Document",
+        ".mp4":"Video",
+        ".mp3":"Audio",
+        ".txt":"Text",
+        ".zip":"Archive",
+        "":"unknown"
+    }
 
+    return categorize
 
  
 def main():
   name = get_directory()
   validate_directory(name)
   scan_directory(name)
-  identify_extention(name)
+  identify_extension(name)
   
 if __name__ == "__main__":
     main()
