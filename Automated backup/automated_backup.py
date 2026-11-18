@@ -1,4 +1,6 @@
 from pathlib import Path 
+from datetime import datetime
+import shutil
 
 def getpaths():
     source = Path(input("Enter the source Path: "))
@@ -33,7 +35,18 @@ def prepare_destination(source,destination):
         destination.mkdir()
         print("[+] Destination path created")
         return True
-        
+    else:
+        print("[+] Destination Exists")
+        return True
+
+def create_backup(source, destination):
+    name = source.name
+    time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    final_file_name = f"{name}_{time}"
+    print("[+] creating the zip file")
+    shutil.make_archive(destination/final_file_name, "zip", source )
+    print(f"[+] Zip file created in loc {destination}")
+
 
 def main():
     source,destination = getpaths()
@@ -41,7 +54,7 @@ def main():
     if result:
        r1 = prepare_destination(source,destination)
        if r1:
-         pass
+         create_backup(source,destination)
 
 if __name__ == "__main__":
     main()
