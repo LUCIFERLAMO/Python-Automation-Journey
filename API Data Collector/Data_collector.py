@@ -1,8 +1,18 @@
 import requests
 
 url = "https://jsonplaceholder.typicode.com/posts"
-
-result = requests.get(url)
+try: 
+  print("[+] Fetching data")
+  result = requests.get(url,timeout=10)
+  result.raise_for_status()
+except requests.exceptions.Timeout:
+   print("[-] Time out")
+except requests.exceptions.ConnectionError:
+   print("[-] Connection error")
+except requests.exceptions.HTTPError:
+   print(f"[-] Status code: {result.status_code}")
+   print("[-] detects an HTTP error")
+   
 
 if result.status_code == 200:
     print("[+] Data collected")
