@@ -1,8 +1,12 @@
-# Smart File Organizer
+# Python Automation Journey
+
+This repository contains small Python automation projects.
+
+## Smart File Organizer
 
 `smart_file_organizer.py` is a Python command-line tool that organizes files from a selected directory into category folders based on their file extensions.
 
-## Features
+### Features
 
 - Accepts a directory path from the user
 - Validates that the path exists and is a directory
@@ -13,7 +17,7 @@
 - Moves files without extensions or known categories into an `unknown` folder
 - Prints the organization results in a table
 
-## Supported Categories
+### Supported Categories
 
 | Extension | Category |
 |-----------|----------|
@@ -24,7 +28,7 @@
 | `.txt` | Text |
 | `.zip` | Archive |
 
-## Usage
+### Usage
 
 Run the program from a terminal:
 
@@ -32,4 +36,22 @@ Run the program from a terminal:
 python smart_file_organizer.py
 ```
 
-Enter the path of the directory you want to organize when prompted.
+## API Data Collector
+
+`API Data Collector/Data_collector.py` collects posts from the JSONPlaceholder API for a selected user ID.
+
+### Features
+
+- Accepts a user ID between 1 and 10
+- Fetches matching posts from the API
+- Handles timeout, connection, and HTTP errors
+- Extracts post ID, title, and body
+- Saves the extracted data as JSON and CSV
+
+### Usage
+
+```bash
+python "API Data Collector/Data_collector.py"
+```
+
+The JSON output is saved as `posts_under_<userId>`, and the CSV output is saved as `posts_<userId>.csv`.
