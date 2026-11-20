@@ -14,11 +14,32 @@ except requests.exceptions.HTTPError:
    print("[-] detects an HTTP error")
    
 
+def extract_data(data):
+   Extracted_data = []
+
+   for row in data:
+      e ={
+         "id":row.get("id"),
+         "title":row.get("title"),
+         "body":row.get("body")
+      }
+      Extracted_data.append(e)
+    
+   print(f"Total data extracted: {len(Extracted_data)}")
+   print("----------- Extracted Date --------------")
+   for i in Extracted_data:
+      print(i)
+      print()
+
+
 if result.status_code == 200:
     print("[+] Data collected")
     data = result.json()
     print(f"Total number of data retrived: {len(data)}")
-    print("[+] Title of the first post")
-    print(data[0]["title"])
+    extract_data(data)
 else:
     print("[-] Data not retrived")
+
+
+
+   
