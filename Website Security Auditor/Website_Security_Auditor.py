@@ -35,9 +35,36 @@ def connect_website(url):
 
     print(f"Status code: {data.status_code}")
     print(f"Final Url: {data.url}")
-    return True
+    return data
 
+def check_security_headers(response):
+    security_headers = [
+    "Strict-Transport-Security",
+    "Content-Security-Policy",
+    "X-Frame-Options",
+    "X-Content-Type-Options",
+    "Referrer-Policy",
+    "Permissions-Policy"
+   ]
+
+    present=0
+    absent=0
+
+    for security_header in security_headers:
+        if security_header in response:
+            print(f"[+] {security_header} present")
+            present+=1
+            value = response.get(security_header)
+            print(f"[+] Value: {value}")
+        else:
+            print(f"[-] {security_header} absent")
+            absent+=1
+
+    print(f"Total Present: {present}")
+    print(f"Total absent: {absent}")
+    
 if __name__ == "__main__":
     url = validate_url()
     if url:
-        connect_website(url)
+        response = connect_website(url)
+        check_security_headers(response)
