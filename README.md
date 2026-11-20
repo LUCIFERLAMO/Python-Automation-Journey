@@ -55,3 +55,23 @@ python "API Data Collector/Data_collector.py"
 ```
 
 The JSON output is saved as `posts_under_<userId>`, and the CSV output is saved as `posts_<userId>.csv`.
+
+## Website Security Auditor
+
+`Website Security Auditor/Website_Security_Auditor.py` analyzes the security configuration of a public HTTP or HTTPS website.
+
+### Features
+
+- Validates URLs and rejects embedded credentials
+- Checks HTTP-to-HTTPS redirects
+- Inspects security response headers
+- Checks cookie attributes including Secure, HttpOnly, and SameSite
+- Validates TLS certificates and certificate expiration
+- Produces security findings with severity levels and summaries
+- Saves the complete audit as JSON and CSV reports
+
+### Usage
+
+```bash
+python "Website Security Auditor/Website_Security_Auditor.py"
+```
