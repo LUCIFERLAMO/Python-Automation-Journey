@@ -1,5 +1,6 @@
 import requests
 import json
+import csv
 
 def get_data(parameter):
   url = "https://jsonplaceholder.typicode.com/posts"
@@ -39,7 +40,6 @@ def get_userID():
     print("[-] userId is not with in 0-10")
     return
   
-    
 
 def extract_data(data):
    Extracted_data = []
@@ -65,6 +65,13 @@ def save_json(data, userId):
     json.dump(data,f,indent=4)
   print(f"[+] Data saved: {file_name}")
 
+def save_csv(data,userId):
+  file_name = f"posts_{userId}.csv"
+  with open(file_name,"w",newline="",encoding="utf-8" )as f:
+    writer = csv.DictWriter(f,fieldnames=["id","title","body"]) # shd be same as the key, no upper case.
+    writer.writeheader()
+    writer.writerows(data)
+
 if __name__ == "__main__":
   userid = get_userID()
   if userid:
@@ -72,6 +79,7 @@ if __name__ == "__main__":
     if data: 
       extracted_data = extract_data(data)
       save_json(extracted_data,userid)
+      save_csv(extracted_data,userid)
 
 
    
