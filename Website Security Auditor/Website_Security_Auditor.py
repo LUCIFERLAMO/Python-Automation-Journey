@@ -126,7 +126,17 @@ def check_https_redirect(url):
           print("[+] HTTP - HTTPS converstion Successful")
       else:
           print("[-] HTTP -HTTPS conversion Unsuccessful")
-      
+
+def inspect_cookies(response):
+    if len(response.cookies) == 0:
+        print("[-] No cookies found")
+        return
+    for cookie in response.cookies:
+      print("Name:", cookie.name)
+      print("Secure:", "ENABLED" if cookie.secure else "MISSING")
+      print("HttpOnly:","ENABLED" if cookie.has_nonstandard_attr("HttpOnly") else "MISSING")
+      print("SameSite:","ENABLED" if cookie.get_nonstandard_attr("SameSite") else "MISSING")
+      print()
 
     
 if __name__ == "__main__":
@@ -134,5 +144,6 @@ if __name__ == "__main__":
     if url:
         response = connect_website(url)
         check_https_redirect(url)
+        inspect_cookies(response)
         check_security_headers(response)
         inspect_tls(url)
