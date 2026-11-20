@@ -109,11 +109,30 @@ def inspect_tls(url):
         except ssl.SSLCertVerificationError:
             print("[-] certificate verification failed")
 
+def check_https_redirect(url):
+    data = urlparse(url)
+    hostname = data.hostname
+
+    http_url = f"http://{hostname}.com"
+
+    response = requests.get(http_url,timeout=10)
+
+    for redirect in response.history:
+      print("[+] Status Code:", redirect.status_code)
+      print("[+] URL:", redirect.url)
+      print("[+] Redirect Location:", redirect.headers.get("Location"))
+      final_url = urlparse(redirect.headers.get("Location"))
+      if final_url.scheme == "https":
+          print("[+] HTTP - HTTPS converstion Successful")
+      else:
+          print("[-] HTTP -HTTPS conversion Unsuccessful")
+      
 
     
 if __name__ == "__main__":
     url = validate_url()
     if url:
         response = connect_website(url)
+        check_https_redirect(url)
         check_security_headers(response)
         inspect_tls(url)
