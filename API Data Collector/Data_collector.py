@@ -1,4 +1,5 @@
 import requests
+import json
 
 def get_data(parameter):
   url = "https://jsonplaceholder.typicode.com/posts"
@@ -32,8 +33,11 @@ def get_userID():
   except ValueError:
     print("[-] Value error only int accepted")
     return 
-  if isinstance(userid,int):
+  if 0 <= userid <=10 : # chain operation 
     return userid
+  else:
+    print("[-] userId is not with in 0-10")
+    return
   
     
 
@@ -53,14 +57,21 @@ def extract_data(data):
       print(i)
       print()
 
+   return Extracted_data
 
+def save_json(data, userId):
+  file_name = f"posts_under_{userId}"
+  with open(file_name, "w")as f:
+    json.dump(data,f,indent=4)
+  print(f"[+] Data saved: {file_name}")
 
 if __name__ == "__main__":
   userid = get_userID()
   if userid:
     data = get_data(userid)
     if data: 
-      extract_data(data)
+      extracted_data = extract_data(data)
+      save_json(extracted_data,userid)
 
 
    
